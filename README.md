@@ -14,4 +14,4 @@ A python script that calculates the average time that takes a Covid19 patient to
 	  Total Recovered : 291
 	   Avg Recovery Time : 16 Days
 
-**Note** :  The output may not be accurate since the result is calculated by assuming the first confirmed patient is confirmed first.
+**Note** :  The output may not be accurate since the result is calculated by assuming the first confirmed patient is recovered first.
