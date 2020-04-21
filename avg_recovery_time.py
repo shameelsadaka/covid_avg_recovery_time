@@ -1,8 +1,7 @@
-
-
-
 import requests
 import json
+from datetime import datetime  
+from datetime import timedelta  
 
 class Patient:
 	avg = 0
@@ -28,6 +27,8 @@ def avg_rec_time_kerala():
 	dist_count = {"Alappuzha":0,"Ernakulam":0,"Idukki":0,"Kannur":0,"Kasaragod":0,"Kollam":0,"Kottayam":0,"Kozhikode":0,"Malappuram":0,"Palakkad":0,"Pathanamthitta":0,"Thiruvananthapuram":0,"Thrissur":0,"Wayanad":0}
 	dist_recov = {"Alappuzha":0,"Ernakulam":0,"Idukki":0,"Kannur":0,"Kasaragod":0,"Kollam":0,"Kottayam":0,"Kozhikode":0,"Malappuram":0,"Palakkad":0,"Pathanamthitta":0,"Thiruvananthapuram":0,"Thrissur":0,"Wayanad":0}
 
+	daily_patients  = [0]*len(days)
+
 	for i in range(len(days)):
 		dayDelta = days[i]['summary']
 		for d in dayDelta:
@@ -40,7 +41,7 @@ def avg_rec_time_kerala():
 			for x in range(new_cases):
 				patients.append(Patient(i))
 			dist_count[d] = int(dist["confirmed"])
-
+			daily_patients[i] += new_cases
 
 			# Update Recovered
 
@@ -61,9 +62,20 @@ def avg_rec_time_kerala():
 	for p in patients:
 		avg += p.avg
 
-	avg = avg/lastRecovered
+	avg = int(avg/lastRecovered)
 
-	print("Avg Recovery Time : "+str(int(avg)) + " Days")
+	print("Avg Recovery Time : "+str(avg) + " Days")
+
+	print("\n\n")
+
+	print("Recovery Prediction for Next days")
+
+	nextRecovery = daily_patients[-avg:]
+	today = datetime.now()
+
+	for i in range(len(nextRecovery)):
+		thisDay = today + timedelta(days=i+1)
+		print(thisDay.strftime("%B %d") + " :\t" + str(nextRecovery[i]))
 
 
 def avg_rec_time_india():
@@ -77,7 +89,6 @@ def avg_rec_time_india():
 	lastRecovered = 0;
 
 	days = data['cases_time_series']
-
 	for i in range(len(days)):
 		day = days[i]
 
